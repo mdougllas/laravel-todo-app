@@ -9,7 +9,7 @@ class TasksController extends Controller
 {
     public function index()
     {
-        $tasks = Task::all();
+        $tasks = Task::all()->sortKeysDesc();
         return view('tasks.index', compact('tasks'));
     }
 
@@ -25,9 +25,16 @@ class TasksController extends Controller
         return view('tasks.create');
     }
 
-    public function store()
+    public function store(Request $request)
     {
-        $newTask = request()->all();
+        $request->flashOnly(['title', 'description']);
+
+        $validatedData = $request->validate([
+            'title' => 'required | min: 6',
+            'description' => 'required | min: 15'
+        ]);
+
+        $newTask = $validatedData;
 
         $task = new Task();
         $task->name = $newTask['title'];
@@ -36,6 +43,9 @@ class TasksController extends Controller
 
         $task->save();
 
-        return redirect('/tasks');
+        if ($validatedData->fails()) {
+            return redirect('/tasks')
+                ->withInput();
+        }
     }
 }

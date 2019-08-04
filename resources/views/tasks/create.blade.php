@@ -9,11 +9,19 @@
             <div class="card-body">
                 <form action="create-task" method="POST">
                     @csrf
+
                     <div class="form-group">
-                        <input type="text" name="title" placeholder="Title" class="form-control">
+                        <input type="text" name="title" placeholder="Title" class="form-control @error('title') is-invalid @enderror" value="{{ old('title') }}">
+                        @error('title')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
                     </div>
+
                     <div class="form-group">
-                        <textarea name="description" placeholder="Description" cols="5" rows="5" class="form-control"></textarea>
+                        <textarea name="description" placeholder="Description" cols="5" rows="5" class="form-control @error('description') is-invalid @enderror">{{ old('description') }}</textarea>
+                        @error('description')
+                            <div class="alert alert-danger">{{ $message }}</div>
+                        @enderror
                     </div>
 
                     <div class="form-group text-center">
