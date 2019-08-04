@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class TodosSeeder extends Seeder
+class TasksSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,6 +11,6 @@ class TodosSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Todo::class, 10)->create();
+        factory(App\Task::class, 5)->create();
     }
 }

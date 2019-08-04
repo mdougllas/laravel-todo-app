@@ -15,4 +15,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('todos', 'TodosController@index');
+Route::get('tasks', 'TasksController@index');
+Route::get('tasks/{task}', 'TasksController@show');
+Route::get('create-task', 'TasksController@create');
+Route::post('create-task', 'TasksController@store');
