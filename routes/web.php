@@ -1,4 +1,5 @@
 <?php
+use App\Http\Controllers\TasksController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,7 +16,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('tasks', 'TasksController@index');
-Route::get('tasks/{task}', 'TasksController@show');
-Route::get('create-task', 'TasksController@create');
-Route::post('create-task', 'TasksController@store');
+Route::get('tasks/{task}/completed', 'TasksController@complete');
+
+Route::resource('tasks', 'TasksController');
+
+//The above line is a Laravel helper that just does the below out of the box:
+// Route::get('tasks', 'TasksController@index');
+// Route::post('tasks', 'TasksController@store');
+// Route::get('tasks/create', 'TasksController@create');
+// Route::get('tasks/{task}', 'TasksController@show');
+// Route::get('tasks/{task}', 'TasksController@update');
+// Route::get('tasks/{task}', 'TasksController@destroy');
+// Route::get('tasks/{task}/edit', 'TasksController@edit');

@@ -22,11 +22,18 @@
                         <a href="/tasks" class="nav-link">To Do List <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item active">
-                        <a href="/create-task" class="nav-link">Create Task <span class="sr-only">(current)</span></a>
+                        <a href="/tasks/create" class="nav-link">Create Task <span class="sr-only">(current)</span></a>
                     </li>
                 </ul>
             </div>
         </nav>
+        <div class="container">
+            @if (session()->has('success'))
+                <div class="alert alert-success text-center">
+                    {{ session()->get('success') }}
+                </div>
+            @endif
+        </div>
         <div class="container">
             @yield('content')
         </div>

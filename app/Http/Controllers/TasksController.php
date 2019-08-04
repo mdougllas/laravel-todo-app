@@ -7,16 +7,24 @@ use Illuminate\Http\Request;
 
 class TasksController extends Controller
 {
+    private $validate = [
+        'title' => ['required', 'min: 6'],
+        'description' => ['required', 'min: 15']
+    ];
+
+    private function showFeedBackMessage($message)
+    {
+        return session()->flash('success', $message);
+    }
+
     public function index()
     {
         $tasks = Task::all()->sortKeysDesc();
         return view('tasks.index', compact('tasks'));
     }
 
-    public function show($taskId)
+    public function show(Task $task)
     {
-        $task = Task::find($taskId);
-
         return  view('tasks.show', compact('task'));
     }
 
@@ -27,25 +35,51 @@ class TasksController extends Controller
 
     public function store(Request $request)
     {
-        $request->flashOnly(['title', 'description']);
+        $attributes = $request->validate($this->validate);
 
-        $validatedData = $request->validate([
-            'title' => 'required | min: 6',
-            'description' => 'required | min: 15'
-        ]);
+        $attributes['completed'] = false;
 
-        $newTask = $validatedData;
+        Task::create($attributes);
 
-        $task = new Task();
-        $task->name = $newTask['title'];
-        $task->description = $newTask['description'];
-        $task->completed = false;
+        $this->showFeedbackMessage("Task created successfully");
 
-        $task->save();
-
-        if ($validatedData->fails()) {
-            return redirect('/tasks')
-                ->withInput();
-        }
+        return redirect('/tasks');
     }
+
+    public function edit(Task $task)
+    {
+        return view('tasks.edit', compact('task'));
+    }
+
+    public function update(Task $task)
+    {
+        $updatedAttributes = request()->validate($this->validate);
+
+        $updatedAttributes['completed'] = false;
+
+        $task->update($updatedAttributes);
+
+        $this->showFeedbackMessage("Task updated successfully");
+
+        return  view('tasks.show', compact('task'));
+    }
+
+    public function destroy(Task $task)
+    {
+        $task->delete();
+
+        $this->showFeedbackMessage("Task deleted successfully");
+
+        return redirect('/tasks');
+    }
+
+    public function complete(Task $task)
+    {
+        $task->update(['completed' => true]);
+
+        $this->showFeedbackMessage("Task completed successfully");
+
+        return redirect('/tasks');
+    }
+
 }

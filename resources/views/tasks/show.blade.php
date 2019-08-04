@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('title')
-    {{ $task->name }}
+    {{ $task->title }}
 @endsection
 
 @section('content')
     <h1 class="text-center my-5">
-        {{ $task->name }}
+        {{ $task->title }}
     </h1>
 
     <div class="row justify-content-center">
@@ -20,6 +20,13 @@
                     {{ $task->description }}
                 </div>
             </div>
+
+            <form action="/tasks/{{ $task->id }}" method="POST">
+                @method('DELETE')
+                @csrf
+                <a href="/tasks/{{ $task->id }}/edit" class="btn btn-info btn-sm my-2">Edit</a>
+                <button type="submit" class="btn btn-danger btn-sm">DELETE</button>
+            </form>
 
         </div>
     </div>
